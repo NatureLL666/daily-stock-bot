@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "run_at": "2026-09-17T14:21:47.840091+00:00",
+  "run_at": "2026-09-17T14:27:42.898501+00:00",
   "market_session": "2026-09-16",
   "counts": {
     "valid": 14,
@@ -20,7 +20,7 @@
       "data_date": "2026-09-15",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840033+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898365+00:00",
       "unit": "%",
       "details": {
         "frequency": "daily; publication may lag the observation"
@@ -33,7 +33,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840050+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898383+00:00",
       "unit": "",
       "details": {}
     },
@@ -44,7 +44,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840053+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898393+00:00",
       "unit": "",
       "details": {
         "ma20": 79.05687828063965,
@@ -58,7 +58,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840056+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898404+00:00",
       "unit": "%",
       "details": {
         "period": "completed UTC day",
@@ -72,7 +72,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840058+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898415+00:00",
       "unit": "",
       "details": {
         "ma20": 293.28931427001953,
@@ -86,7 +86,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840061+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898422+00:00",
       "unit": "",
       "details": {
         "ma20": 513.1881927490234,
@@ -100,7 +100,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840064+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898435+00:00",
       "unit": "",
       "details": {
         "previous_ratio": 1.3242564529795413,
@@ -115,7 +115,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840067+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898446+00:00",
       "unit": "",
       "details": {}
     },
@@ -126,7 +126,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840069+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898456+00:00",
       "unit": "",
       "details": {}
     },
@@ -137,10 +137,10 @@
       "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840071+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898464+00:00",
       "unit": "",
       "details": {
-        "timestamp": "2026-09-17T14:14:18+00:00",
+        "timestamp": "2026-09-17T14:26:39+00:00",
         "rating": "fear"
       }
     },
@@ -151,7 +151,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840073+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898469+00:00",
       "unit": "%",
       "details": {
         "universe": "S&P 500",
@@ -166,7 +166,7 @@
       "data_date": "2026-06-10",
       "status": "delayed",
       "reason": "公开数据延迟约三个月，仅供历史参考，不参与当前多空统计",
-      "fetched_at": "2026-09-17T14:21:47.840076+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898473+00:00",
       "unit": "",
       "details": {
         "frequency": "weekly",
@@ -184,18 +184,18 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840080+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898481+00:00",
       "unit": "",
       "details": {}
     },
     "AAII": {
       "value": -24.499999999999996,
-      "source": "AAII official weekly survey (via Firecrawl)",
+      "source": "AAII official weekly survey",
       "source_url": "https://www.aaii.com/sentimentsurvey",
       "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840083+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898486+00:00",
       "unit": "pp",
       "details": {
         "bull": 28.8,
@@ -205,12 +205,7 @@
         "survey_week_ending": "2026-09-16",
         "frequency": "weekly",
         "publication_evidence": "official page dateModified/datePublished + weekly period",
-        "retrieval_method": "Firecrawl rawHtml; maxAge=0; no AI extraction",
-        "source_checks": 1,
-        "source_warnings": [
-          "provider bot-check page (HTTP 200); no market data",
-          "provider bot-check page (HTTP 200); no market data"
-        ]
+        "source_checks": 2
       }
     },
     "PUT_CALL": {
@@ -220,7 +215,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.840089+00:00",
+      "fetched_at": "2026-09-17T14:27:42.898496+00:00",
       "unit": "",
       "details": {
         "ratio_type": "TOTAL",
@@ -236,7 +231,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572094+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751035+00:00",
       "unit": "",
       "details": {}
     },
@@ -247,7 +242,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572115+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751092+00:00",
       "unit": "",
       "details": {}
     },
@@ -258,7 +253,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572127+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751135+00:00",
       "unit": "",
       "details": {}
     },
@@ -269,7 +264,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572138+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751176+00:00",
       "unit": "",
       "details": {}
     },
@@ -280,7 +275,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572148+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751214+00:00",
       "unit": "",
       "details": {}
     },
@@ -291,7 +286,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572194+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751364+00:00",
       "unit": "",
       "details": {}
     },
@@ -302,7 +297,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572208+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751412+00:00",
       "unit": "",
       "details": {}
     },
@@ -313,7 +308,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572218+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751452+00:00",
       "unit": "",
       "details": {}
     },
@@ -324,7 +319,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572227+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751490+00:00",
       "unit": "",
       "details": {}
     },
@@ -335,7 +330,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.572237+00:00",
+      "fetched_at": "2026-09-17T14:27:42.751526+00:00",
       "unit": "",
       "details": {}
     },
@@ -346,7 +341,7 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:21:47.834352+00:00",
+      "fetched_at": "2026-09-17T14:27:42.893718+00:00",
       "unit": "%",
       "details": {}
     }
