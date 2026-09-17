@@ -1,10 +1,10 @@
 # 安装、修复与运行报告
 
-核验时点：2026-09-17T14:21:47.840091+00:00。工作目录：当前 daily-stock-bot。
+核验时点：2026-09-17T14:27:42.898501+00:00（GitHub Actions Ubuntu 实跑）。
 
 ① 项目是否成功运行
 
-已 clone、通读全部源文件、创建 Python 3.11.16 虚拟环境并安装依赖。多次执行完整入口，最新一次退出码 0，Telegram API 确认向已绑定私人会话发送 1 条完整报告。保留全部 15 指标及原多空规则；当前 14 项有效，AAII 已通过官方页面的备用传输恢复，NAAIM 按用户要求使用免费公开延迟数据，显示真实值及日期，以 delayed 独立计数。
+已 clone、通读全部源文件、创建 Python 3.11.16 虚拟环境并安装依赖。多次执行完整入口，最新一次本地及 GitHub Actions 均成功，云端 Telegram API 确认向已绑定私人会话发送 1 条完整报告，生成数据已自动提交。保留全部 15 指标及原多空规则；当前 14 项有效，AAII 已通过官方页面的备用传输恢复，NAAIM 按用户要求使用免费公开延迟数据，显示真实值及日期，以 delayed 独立计数。
 
 ② 哪些数据源原本失效
 
@@ -33,7 +33,7 @@ Telegram 使用环境变量 `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`。本机�
 | ABOVE_200_DAYS | 50.09% | [TradingView INDEX:S5TH](https://www.tradingview.com/symbols/INDEX-S5TH/) | 2026-09-16 | valid | Neutral |
 | NAAIM | 79.27（延迟 99 天） | [NAAIM official weekly table (public delayed access)](https://index.naaim.org/embeddable/table) | 2026-06-10 | delayed | Excluded |
 | SKEW | 145.95 | [CBOE daily CSV](https://cdn.cboe.com/api/global/us_indices/daily_prices/SKEW_History.csv) | 2026-09-16 | valid | Bear |
-| AAII | −24.5pp | [AAII 官方调查页，经 Firecrawl 原始 HTML 传输](https://www.aaii.com/sentimentsurvey) | 2026-09-17 发布；9/16 调查周截止 | valid | Bull |
+| AAII | −24.5pp | [AAII 官方调查页；本机备用 Firecrawl、云端直连](https://www.aaii.com/sentimentsurvey) | 2026-09-17 发布；9/16 调查周截止 | valid | Bull |
 | PUT_CALL | 0.98 | [CBOE TOTAL PUT/CALL RATIO](https://www.cboe.com/markets/us/options/market-statistics/daily?dt=2026-09-16) | 2026-09-16 | valid | Neutral |
 
 ```text
@@ -44,24 +44,24 @@ Discord: skipped (DISCORD_WEBHOOK_URL 未设置)
 Telegram: sent (1 parts; API confirmed destination)
 ```
 
-原算法输出 Risk Off，仅由 14 项有效数据决定，不是新的评分模型或收益预测。FRED 5.00% 的观察日为 9/15，不能称为 9/17 实时报价。AAII Bull 28.8%、Neutral 17.9%、Bear 53.3%，保留 9/17 原始发布日期；CSV 与 JSON 的日期、有效值及计数一致，NAAIM 保存真实值且 status=delayed，仅作为历史参考；1 项延迟参考、0 项缺失。完整终端记录：[local-run-delayed-naaim.log](evidence/local-run-delayed-naaim.log)，结构化快照：[latest.json](data/latest.json)，CSV：[history.csv](data/history.csv)。
+原算法输出 Risk Off，仅由 14 项有效数据决定，不是新的评分模型或收益预测。FRED 5.00% 的观察日为 9/15，不能称为 9/17 实时报价。AAII Bull 28.8%、Neutral 17.9%、Bear 53.3%，保留 9/17 原始发布日期；CSV 与 JSON 的日期、有效值及计数一致，NAAIM 保存真实值且 status=delayed，仅作为历史参考；1 项延迟参考、0 项缺失。云端完整记录：[GitHub Actions 成功运行](https://github.com/NatureLL666/daily-stock-bot/actions/runs/35233636641)；本机记录：[local-run-delayed-naaim.log](evidence/local-run-delayed-naaim.log)，结构化快照：[latest.json](data/latest.json)，CSV：[history.csv](data/history.csv)。
 
 ⑤ 当前风险
 
 - NAAIM 公开最新行是 2026-06-10 = 79.27。按用户选择继续使用，以 delayed 展示值、原日期及 99 天延迟，排除当前多空统计；仅此官方表允许延迟参考，超过 110 日或数值异常仍 invalid。发布日期未披露，保持空值。
-- AAII 官方 XLS/页面直连仍被反爬拦截。本次复用现有 Firecrawl 账户，通过实时 `maxAge=0` 请求取得同一官方页面的 rawHtml，独立请求与完整入口运行均验证成功。只解析原始 HTML，不用 AI 生成或提取的数值、不读本地旧缓存。备用通道依赖服务额度；没有 key 或抓取失败时仍会 invalid。
+- AAII 本机官方 XLS/页面直连被反爬拦截；本次 GitHub Actions 实跑已能直连官方页。本次复用现有 Firecrawl 账户，通过实时 `maxAge=0` 请求取得同一官方页面的 rawHtml，独立请求与完整入口运行均验证成功。只解析原始 HTML，不用 AI 生成或提取的数值、不读本地旧缓存。备用通道依赖服务额度；没有 key 或抓取失败时仍会 invalid。
 - CNN、AAII、TradingView、CBOE 页面内 JSON 不保证接口/页面永久不变；Yahoo 也可能限流。异常时显示 invalid，不填 0/-1。
 - 旧历史已含错误数据、缺少逐指标时间证据，只保留原始档案，不宣称已修复全部历史行情。
 
 ⑦ GitHub Actions 是否可以直接部署
 
-已按用户选择改为每天北京时间 07:00 / 21:00（含周末），对应 UTC 23:00 / 13:00；目标仓库为 NatureLL666/daily-stock-bot。GitHub 定时可能排队延迟，实际消息在采集完成后发送。云端部署结果另记于下方。checkout 已更新到官方稳定 v7.0.1，setup-python 到 v7.0.0；Ubuntu/Python 3.11；增加权限、串行、超时、回归测试、数据质量摘要及安全提交顺序。
+已按用户选择改为每天北京时间 07:00 / 21:00（含周末），对应 UTC 23:00 / 13:00；目标仓库为 NatureLL666/daily-stock-bot。GitHub 定时可能排队延迟，实际消息在采集完成后发送。已部署并启用；首次云端运行、Telegram 推送、自动提交数据均验证成功。checkout 已更新到官方稳定 v7.0.1，setup-python 到 v7.0.0；Ubuntu/Python 3.11；增加权限、串行、超时、回归测试、数据质量摘要及安全提交顺序。
 
-验证：100 项回归测试通过，覆盖 Telegram 长消息分段、无配置跳过、错误目标/HTTP 拒绝、超时不重试与脱敏、推送失败保留本地数据，以及 AAII 官方页面备用来源、日期、过期/空内容拒绝等。pip check、Python 语法、YAML 和所有 shell 片段通过；Ubuntu x86_64/Python 3.11 的 37 项 wheel 依赖解析成功，本次未引入新依赖。Telegram 实际投递已确认。本机无 Linux VM/Docker；云端 Actions 实跑结果待部署验证。Discord Webhook 未测试。源站可能同样限制 GitHub 的出口 IP。
+验证：100 项回归测试通过，覆盖 Telegram 长消息分段、无配置跳过、错误目标/HTTP 拒绝、超时不重试与脱敏、推送失败保留本地数据，以及 AAII 官方页面备用来源、日期、过期/空内容拒绝等。pip check、Python 语法、YAML 和所有 shell 片段通过；Ubuntu x86_64/Python 3.11 的 37 项 wheel 依赖解析成功，本次未引入新依赖。Telegram 实际投递已确认。GitHub 托管 Ubuntu 云端实跑通过安装依赖、100 项测试、采集、Telegram、数据质量摘要及历史数据提交全部步骤。Discord Webhook 未测试。源站可能同样限制 GitHub 的出口 IP。
 
 ⑧ 下一步
 
-本地已可直接运行 `.venv/bin/python main.py`，并自动发送 Telegram。用户已选择 GitHub Actions 每天北京时间 07:00 / 21:00，且已完成 GitHub CLI 登录。云端凭据仅使用加密 Repository secrets `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`、`FIRECRAWL_API_KEY`，不会上传本机 `.env`。
+本地已可直接运行 `.venv/bin/python main.py`，并自动发送 Telegram。[GitHub Actions](https://github.com/NatureLL666/daily-stock-bot/actions/workflows/daily_run.yml) 已启用，每天北京时间 07:00 / 21:00 自动采集后推送，含周末；电脑关机不影响云端任务。21:00 通常在美股开盘前，技术指标继续使用最近完整收盘。云端凭据仅使用加密 Repository secrets `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`、`FIRECRAWL_API_KEY`，不会上传本机 `.env`。
 
 NAAIM 当前无需订阅。公开延迟数据作为历史参考保留，如将来需要最新一期，可再接入合法周度导出。没有建立本机定时服务。
 
