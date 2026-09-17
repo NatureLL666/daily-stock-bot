@@ -8,6 +8,7 @@ from skew_index import fetch_skew_index
 from above_200_days_average import fetch_above_200_days_average
 from put_call_ratio import fetch_put_call_ratio
 from treasury_yield import fetch_10y_treasury_yield
+from vix import fetch_vix_index
 
 INDICATORS = {
     # --- 1. 🌊 宏觀與資金 ---
@@ -48,7 +49,7 @@ INDICATORS = {
         'thresholds': (30, 70), 'inverse': True
     },
     'VIX': {
-        'name': '🌪️ VIX 波動', 'category': 'tech', 'type': 'price', 'ticker': '^VIX',
+        'name': '🌪️ VIX 波動', 'category': 'tech', 'type': 'external', 'func': fetch_vix_index,
         'thresholds': (30, 15), 'inverse': False
     },
     'CNN': {

@@ -2,49 +2,96 @@ name: Daily Stock Index Fetcher
 
 on:
   schedule:
-    # UTC 時間 00:00 對應台灣時間 08:00
-    - cron: '0 0 * * *'
-  # 讓你可以在網頁上手動按按鈕測試
+    # UTC 23:00 -> next-day 07:00 Beijing; UTC 13:00 -> 21:00 Beijing.
+    - cron: '0 13,23 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-stock-history-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUNBUFFERED: '1'
 
     steps:
-      - name: Checkout code (下載程式碼)
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
 
-      - name: Set up Python (設定 Python 環境)
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.11'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
-      - name: Install dependencies (安裝套件)
+      - name: Install and verify dependencies
         run: |
-          pip install -r requirements.txt
+          python -m pip install -r requirements-dev.txt
+          python -m pip check
 
-      - name: Run script (執行並發送通知)
+      - name: Regression tests
+        run: python -m pytest -q
+
+      - name: Collect validated data and optionally notify
+        id: collect
         env:
-          # 將剛剛設定的 Secret 注入到環境變數中
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: python main.py
+
+      - name: Publish data quality summary
+        if: always() && steps.collect.outcome != 'skipped'
         run: |
-          python main.py
-          
-      - name: Commit and Push Data (提交並保存數據)
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path('data/latest.json')
+          if path.exists():
+              data = json.loads(path.read_text())
+              text = f"Run at: {data['run_at']}\n\n{data['summary']}\n\n"
+              text += "| Indicator | Value | Data date | Status | Source |\n|---|---|---|---|---|\n"
+              for key, record in data['indicators'].items():
+                  value = record['value'] if record['status'] in {'valid', 'delayed'} else '⚠️ 数据不可用'
+                  text += f"| {key} | {value} | {record['data_date']} | {record['status']} | {record['source']} |\n"
+                  if record['status'] in {'invalid', 'delayed'}:
+                      reason = record.get('reason', '').replace('%', '%25').replace('\n', '%0A').replace('\r', '%0D')
+                      print(f"::warning title={key} unavailable::{reason}")
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as handle:
+                  handle.write(text)
+          PY
+
+      - name: Commit and push only generated data
+        if: always() && (steps.collect.outcome == 'success' || steps.collect.outcome == 'failure')
         run: |
-          # 1. 設定機器人身分 (這會顯示在 Commit 紀錄中)
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          
-          # 2. 拉取最新的遠端程式碼 (避免多人同時寫入產生衝突)
-          git pull
-          
-          # 3. 將新產生的 csv 加入版控
-          git add data/history.csv
-          
-          # 4. 提交變更 (如果沒有變更，例如假日沒開盤，則略過不報錯)
-          git commit -m "📈 Auto-update daily stock history" || exit 0
-          
-          # 5. 推送回儲存庫
-          git push
+          test -f data/latest.json
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add -- data/history.csv data/latest.json
+          if test -f data/history_legacy_unverified.csv; then
+            git add -- data/history_legacy_unverified.csv
+          fi
+          if test -f data/history_schema2_backup.csv; then
+            git add -- data/history_schema2_backup.csv
+          fi
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git commit -m "📈 Auto-update validated daily stock history"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
