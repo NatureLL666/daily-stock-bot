@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "slots": {
+    "2026-09-18T07:00:00+08:00": {
+      "status": "sending",
+      "attempted_at": "2026-09-18T00:17:03.750537+00:00",
+      "github_run_id": "35290501575"
+    }
+  }
+}
