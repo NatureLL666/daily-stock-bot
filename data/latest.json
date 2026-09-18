@@ -1,121 +1,100 @@
 {
   "schema_version": 3,
-  "run_at": "2026-09-17T14:27:42.898501+00:00",
-  "market_session": "2026-09-16",
+  "run_at": "2026-09-18T00:17:14.392571+00:00",
+  "market_session": "2026-09-17",
   "counts": {
-    "valid": 14,
+    "valid": 8,
     "total": 15,
     "bull": 3,
-    "neutral": 5,
-    "bear": 6,
-    "invalid": 0,
+    "neutral": 3,
+    "bear": 2,
+    "invalid": 6,
     "delayed": 1
   },
-  "summary": "Valid Indicators: 14/15\nBull: 3 | Neutral: 5 | Bear: 6\n🔴 市場偏向貪婪/風險 (Risk Off)\n仅统计当前有效指标；延迟参考 1 项，缺失 0 项。沿用原项目规则，未校准预测能力。",
+  "summary": "Valid Indicators: 8/15\nBull: 3 | Neutral: 3 | Bear: 2\n🟢 市場偏向恐懼/機會 (Risk On)\n仅统计当前有效指标；延迟参考 1 项，缺失 6 项。沿用原项目规则，未校准预测能力。",
   "indicators": {
     "BOND_10Y": {
-      "value": 5.0,
+      "value": 5.01,
       "source": "FRED / Federal Reserve DGS10",
       "source_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10",
-      "data_date": "2026-09-15",
+      "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898365+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392478+00:00",
       "unit": "%",
       "details": {
         "frequency": "daily; publication may lag the observation"
       }
     },
     "DXY": {
-      "value": 100.30999755859375,
+      "value": 100.24099731445312,
       "source": "Yahoo Finance (DX-Y.NYB)",
       "source_url": "https://finance.yahoo.com/quote/DX-Y.NYB/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898383+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392501+00:00",
       "unit": "",
       "details": {}
     },
     "HYG": {
-      "value": 78.41999816894531,
-      "source": "Yahoo Finance (HYG, adjusted close)",
+      "value": null,
+      "source": "Yahoo Finance (HYG)",
       "source_url": "https://finance.yahoo.com/quote/HYG/history/",
-      "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898393+00:00",
-      "unit": "",
-      "details": {
-        "ma20": 79.05687828063965,
-        "trend": "Below"
-      }
+      "data_date": null,
+      "status": "invalid",
+      "reason": "ValueError",
+      "fetched_at": "2026-09-18T00:17:07.325630+00:00",
+      "details": {}
     },
     "BTC": {
-      "value": 0.7112745173505353,
+      "value": null,
       "source": "Yahoo Finance (BTC-USD)",
       "source_url": "https://finance.yahoo.com/quote/BTC-USD/history/",
-      "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898404+00:00",
-      "unit": "%",
-      "details": {
-        "period": "completed UTC day",
-        "previous_date": "2026-09-15"
-      }
+      "data_date": null,
+      "status": "invalid",
+      "reason": "ValueError",
+      "fetched_at": "2026-09-18T00:17:07.477477+00:00",
+      "details": {}
     },
     "IWM": {
-      "value": 283.9200134277344,
-      "source": "Yahoo Finance (IWM, adjusted close)",
+      "value": null,
+      "source": "Yahoo Finance (IWM)",
       "source_url": "https://finance.yahoo.com/quote/IWM/history/",
-      "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898415+00:00",
-      "unit": "",
-      "details": {
-        "ma20": 293.28931427001953,
-        "trend": "Below"
-      }
+      "data_date": null,
+      "status": "invalid",
+      "reason": "ValueError",
+      "fetched_at": "2026-09-18T00:17:07.834165+00:00",
+      "details": {}
     },
     "SOXX": {
-      "value": 502.05999755859375,
-      "source": "Yahoo Finance (SOXX, adjusted close)",
+      "value": null,
+      "source": "Yahoo Finance (SOXX)",
       "source_url": "https://finance.yahoo.com/quote/SOXX/history/",
-      "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898422+00:00",
-      "unit": "",
-      "details": {
-        "ma20": 513.1881927490234,
-        "trend": "Below"
-      }
+      "data_date": null,
+      "status": "invalid",
+      "reason": "ValueError",
+      "fetched_at": "2026-09-18T00:17:08.106457+00:00",
+      "details": {}
     },
     "RISK_RATIO": {
-      "value": 1.3222128631241057,
+      "value": null,
       "source": "Yahoo Finance (XLY/XLP)",
       "source_url": "https://finance.yahoo.com/quote/XLY/history/",
-      "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898435+00:00",
-      "unit": "",
-      "details": {
-        "previous_ratio": 1.3242564529795413,
-        "trend": "Down",
-        "xlp_source_url": "https://finance.yahoo.com/quote/XLP/history/"
-      }
+      "data_date": null,
+      "status": "invalid",
+      "reason": "ValueError",
+      "fetched_at": "2026-09-18T00:17:08.389480+00:00",
+      "details": {}
     },
     "RSI": {
-      "value": 41.08548721203199,
+      "value": 49.727682593686026,
       "source": "Yahoo Finance (^GSPC), original RSI(14)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898446+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392516+00:00",
       "unit": "",
       "details": {}
     },
@@ -126,53 +105,48 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898456+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392524+00:00",
       "unit": "",
       "details": {}
     },
     "CNN": {
-      "value": 29.3142857142857,
+      "value": 28.6857142857143,
       "source": "CNN Fear & Greed JSON",
       "source_url": "https://production.dataviz.cnn.io/index/fearandgreed/graphdata",
       "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898464+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392529+00:00",
       "unit": "",
       "details": {
-        "timestamp": "2026-09-17T14:26:39+00:00",
+        "timestamp": "2026-09-17T23:59:56+00:00",
         "rating": "fear"
       }
     },
     "ABOVE_200_DAYS": {
-      "value": 50.09,
+      "value": null,
       "source": "TradingView INDEX:S5TH",
       "source_url": "https://www.tradingview.com/symbols/INDEX-S5TH/",
       "data_date": "2026-09-16",
-      "status": "valid",
-      "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898469+00:00",
-      "unit": "%",
-      "details": {
-        "universe": "S&P 500",
-        "symbol": "INDEX:S5TH",
-        "frequency": "daily"
-      }
+      "status": "invalid",
+      "reason": "breadth bar is not the latest completed session",
+      "fetched_at": "2026-09-18T00:17:09.222665+00:00",
+      "details": {}
     },
     "NAAIM": {
-      "value": 79.27,
+      "value": 92.83,
       "source": "NAAIM official weekly table (public delayed access)",
       "source_url": "https://index.naaim.org/embeddable/table",
-      "data_date": "2026-06-10",
+      "data_date": "2026-06-17",
       "status": "delayed",
       "reason": "公开数据延迟约三个月，仅供历史参考，不参与当前多空统计",
-      "fetched_at": "2026-09-17T14:27:42.898473+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392546+00:00",
       "unit": "",
       "details": {
         "frequency": "weekly",
         "date_kind": "survey observation",
         "release_date": null,
-        "delay_days": 99,
+        "delay_days": 93,
         "eligible_for_summary": false,
         "access": "public_delayed"
       }
@@ -184,27 +158,27 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898481+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392554+00:00",
       "unit": "",
       "details": {}
     },
     "AAII": {
-      "value": -24.499999999999996,
-      "source": "AAII official weekly survey",
-      "source_url": "https://www.aaii.com/sentimentsurvey",
+      "value": -24.528300000000005,
+      "source": "AAII official historical XLS",
+      "source_url": "https://www.aaii.com/files/surveys/sentiment.xls",
       "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898486+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392558+00:00",
       "unit": "pp",
       "details": {
-        "bull": 28.8,
-        "bear": 53.3,
-        "neutral": 17.9,
+        "bull": 28.7736,
+        "bear": 53.3019,
+        "neutral": 17.9245,
         "release_date": "2026-09-17",
-        "survey_week_ending": "2026-09-16",
+        "date_kind": "Reported Date in official XLS",
+        "survey_week_ending": null,
         "frequency": "weekly",
-        "publication_evidence": "official page dateModified/datePublished + weekly period",
         "source_checks": 2
       }
     },
@@ -215,133 +189,133 @@
       "data_date": "2026-09-16",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.898496+00:00",
+      "fetched_at": "2026-09-18T00:17:14.392568+00:00",
       "unit": "",
       "details": {
         "ratio_type": "TOTAL",
-        "lookback_attempts": 0
+        "lookback_attempts": 1
       }
     }
   },
   "market_data": {
     "SPX_Open": {
-      "value": 7601.25,
+      "value": 7631.43994140625,
       "source": "Yahoo Finance (^GSPC)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751035+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252243+00:00",
       "unit": "",
       "details": {}
     },
     "SPX_High": {
-      "value": 7626.7900390625,
+      "value": 7646.85986328125,
       "source": "Yahoo Finance (^GSPC)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751092+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252276+00:00",
       "unit": "",
       "details": {}
     },
     "SPX_Low": {
-      "value": 7507.77001953125,
+      "value": 7611.81005859375,
       "source": "Yahoo Finance (^GSPC)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751135+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252296+00:00",
       "unit": "",
       "details": {}
     },
     "SPX_Close": {
-      "value": 7551.81005859375,
+      "value": 7637.759765625,
       "source": "Yahoo Finance (^GSPC)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751176+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252314+00:00",
       "unit": "",
       "details": {}
     },
     "SPX_Volume": {
-      "value": 5307920000.0,
+      "value": 2887250000.0,
       "source": "Yahoo Finance (^GSPC)",
       "source_url": "https://finance.yahoo.com/quote/%5EGSPC/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751214+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252332+00:00",
       "unit": "",
       "details": {}
     },
     "NDX_Open": {
-      "value": 29110.0390625,
+      "value": 29401.5390625,
       "source": "Yahoo Finance (^NDX)",
       "source_url": "https://finance.yahoo.com/quote/%5ENDX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751364+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252419+00:00",
       "unit": "",
       "details": {}
     },
     "NDX_High": {
-      "value": 29235.890625,
+      "value": 29494.953125,
       "source": "Yahoo Finance (^NDX)",
       "source_url": "https://finance.yahoo.com/quote/%5ENDX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751412+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252445+00:00",
       "unit": "",
       "details": {}
     },
     "NDX_Low": {
-      "value": 28753.2890625,
+      "value": 29305.904296875,
       "source": "Yahoo Finance (^NDX)",
       "source_url": "https://finance.yahoo.com/quote/%5ENDX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751452+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252465+00:00",
       "unit": "",
       "details": {}
     },
     "NDX_Close": {
-      "value": 28945.060546875,
+      "value": 29446.98046875,
       "source": "Yahoo Finance (^NDX)",
       "source_url": "https://finance.yahoo.com/quote/%5ENDX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751490+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252482+00:00",
       "unit": "",
       "details": {}
     },
     "NDX_Volume": {
-      "value": 9968640000.0,
+      "value": 1251579000.0,
       "source": "Yahoo Finance (^NDX)",
       "source_url": "https://finance.yahoo.com/quote/%5ENDX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.751526+00:00",
+      "fetched_at": "2026-09-18T00:17:14.252500+00:00",
       "unit": "",
       "details": {}
     },
     "BOND_3M": {
-      "value": 3.9700000286102295,
+      "value": 3.9650001525878906,
       "source": "Yahoo Finance (^IRX)",
       "source_url": "https://finance.yahoo.com/quote/%5EIRX/history/",
-      "data_date": "2026-09-16",
+      "data_date": "2026-09-17",
       "status": "valid",
       "reason": "",
-      "fetched_at": "2026-09-17T14:27:42.893718+00:00",
+      "fetched_at": "2026-09-18T00:17:14.388942+00:00",
       "unit": "%",
       "details": {}
     }
