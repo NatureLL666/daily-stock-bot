@@ -120,7 +120,7 @@ GitHub 的整点触发可能延迟或丢失。9/18 实际出现过工作流 acti
 - 仅提交生成的数据；先提交再 pull --rebase，不在脏工作区直接 git pull，不用 `|| exit 0` 吞掉提交错误。
 - Actions Summary 列出值、来源、日期、状态；缺失指标发出 warning。
 - 请 fork 到自己的仓库并启用 Actions。Telegram 使用 Repository secrets `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`；AAII 备用通道使用 `FIRECRAWL_API_KEY`；Discord 可选，使用 `DISCORD_WEBHOOK_URL`。组织策略/分支保护也需允许机器人写入目标分支。不要提交本机 `.env`。
-- 已部署到 [NatureLL666/daily-stock-bot](https://github.com/NatureLL666/daily-stock-bot)，定时工作流处于 active。首次 [Ubuntu 云端实跑](https://github.com/NatureLL666/daily-stock-bot/actions/runs/35233636641) 成功：100 项测试通过，14 项当前有效指标 + 1 项 NAAIM 延迟参考，Telegram API 确认投递，CSV/JSON 已自动提交。电脑关机不影响 GitHub 云端执行。
+- 已部署到 [NatureLL666/daily-stock-bot](https://github.com/NatureLL666/daily-stock-bot)，工作流处于 active。首次 [Ubuntu 手动实跑](https://github.com/NatureLL666/daily-stock-bot/actions/runs/35233636641) 成功；9/18 补发通过 118 项测试，Telegram API 确认投递，CSV/JSON 和发送回执均已提交。各期有效指标数量随源站更新而变化，实际定时触发的验证边界见 [推送排查记录](docs/schedule-incident-2026-09-18.md)。电脑关机不影响 GitHub 云端执行。
 
 ## 文件结构
 
