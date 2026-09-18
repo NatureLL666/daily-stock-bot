@@ -1,6 +1,7 @@
 """Daily entry point: collect, validate, report, save, then optionally notify."""
 import data_fetchers as df
 import utils
+import schedule_guard
 from dotenv import load_dotenv
 from config import INDICATORS
 from data_quality import error_reason, invalid, validate_result
@@ -33,8 +34,13 @@ def fetch_all_indices():
     return results
 
 
-def main():
+def main(delivery_slot=None):
     load_dotenv(utils.ROOT / '.env', override=False)
+    if delivery_slot:
+        # CI committed this claim before sending, so a late cron cannot duplicate it.
+        schedule_guard.verify_claim(delivery_slot)
+        import os
+        os.environ['REPORT_SCHEDULED_FOR'] = delivery_slot
     results = fetch_all_indices()
     market_text = df.fetch_market_info()
     market_data = df.fetch_full_market_data()
@@ -43,11 +49,20 @@ def main():
     print('\n' + market_text + '\n\n' + summary, flush=True)
     utils.save_csv(results, market_data, short_yield)
     utils.save_snapshot(results, {**market_data, 'BOND_3M': short_yield}, summary)
-    deliveries = [utils.send_discord(results, market_text, summary),
-                  send_telegram(results, market_text, summary)]
+    deliveries = [utils.send_discord(results, market_text, summary)]
+    telegram_delivery = send_telegram(results, market_text, summary)
+    deliveries.append(telegram_delivery)
+    if delivery_slot:
+        schedule_guard.finish(delivery_slot, telegram_delivery)
+        if telegram_delivery == 'skipped':
+            print('Scheduled Telegram delivery missing configuration; not marked sent')
+            return 2
     # A broken network must be visible in Actions, not a green all-invalid run.
     return 2 if utils.summary_counts(results)['valid'] == 0 or 'failed' in deliveries else 0
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--scheduled-slot')
+    raise SystemExit(main(parser.parse_args().scheduled_slot))

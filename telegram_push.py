@@ -1,6 +1,8 @@
 """Optional Telegram delivery, using environment credentials and explicit chat binding."""
 import os
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import requests
 
@@ -15,7 +17,13 @@ def utf16_length(text):
 
 def build_telegram_messages(results, market_text, summary):
     """Plain text avoids Markdown escaping; split at complete indicator boundaries."""
-    blocks = [f"📊 美股情绪日报 · {utc_now():%Y-%m-%d %H:%M} UTC\n各项以数据日期为准",
+    sent_at = utc_now().astimezone(ZoneInfo('Asia/Shanghai'))
+    heading = f"📊 美股情绪日报 · {sent_at:%Y-%m-%d %H:%M} 北京时间\n各项以数据日期为准"
+    slot = os.environ.get('REPORT_SCHEDULED_FOR')
+    if slot:
+        planned = datetime.fromisoformat(slot).astimezone(ZoneInfo('Asia/Shanghai'))
+        heading += f"\n计划时段: {planned:%Y-%m-%d %H:%M} 北京时间"
+    blocks = [heading,
               summary[:700], (market_text or UNAVAILABLE)[:600]]
     for key, cfg in INDICATORS.items():
         record = validate_result(key, results.get(key))

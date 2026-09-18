@@ -2,8 +2,11 @@ name: Daily Stock Index Fetcher
 
 on:
   schedule:
-    # UTC 23:00 -> next-day 07:00 Beijing; UTC 13:00 -> 21:00 Beijing.
-    - cron: '0 13,23 * * *'
+    - cron: '0 7,21 * * *'
+      timezone: 'Asia/Shanghai'
+    # Retry missing triggers off the hour; the receipt gate prevents duplicate sends.
+    - cron: '5,15,25,35,45,55 7,8,21,22 * * *'
+      timezone: 'Asia/Shanghai'
   workflow_dispatch:
 
 permissions:
@@ -27,7 +30,12 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
 
+      - name: Check whether this Beijing report is still due
+        id: gate
+        run: python3 schedule_guard.py --output "$GITHUB_OUTPUT"
+
       - name: Set up Python
+        if: steps.gate.outputs.send == 'true'
         uses: actions/setup-python@v7.0.0
         with:
           python-version: '3.11'
@@ -37,21 +45,38 @@ jobs:
             requirements-dev.txt
 
       - name: Install and verify dependencies
+        if: steps.gate.outputs.send == 'true'
         run: |
           python -m pip install -r requirements-dev.txt
           python -m pip check
 
       - name: Regression tests
+        if: steps.gate.outputs.send == 'true'
         run: python -m pytest -q
 
+      - name: Persist notification claim before sending
+        if: steps.gate.outputs.send == 'true'
+        env:
+          REPORT_SLOT: ${{ steps.gate.outputs.slot }}
+        run: |
+          python schedule_guard.py --claim "$REPORT_SLOT"
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add -- data/delivery_state.json
+          git commit -m "Record scheduled report delivery attempt"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+
       - name: Collect validated data and optionally notify
+        if: steps.gate.outputs.send == 'true'
         id: collect
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
-        run: python main.py
+          REPORT_SLOT: ${{ steps.gate.outputs.slot }}
+        run: python main.py --scheduled-slot "$REPORT_SLOT"
 
       - name: Publish data quality summary
         if: always() && steps.collect.outcome != 'skipped'
@@ -82,6 +107,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add -- data/history.csv data/latest.json
+          git add -- data/delivery_state.json
           if test -f data/history_legacy_unverified.csv; then
             git add -- data/history_legacy_unverified.csv
           fi
