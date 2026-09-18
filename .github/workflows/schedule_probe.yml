@@ -1,0 +1,16 @@
+name: Temporary UTC Schedule Probe
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Record automatic event time
+        run: date -u '+%Y-%m-%dT%H:%M:%SZ'
