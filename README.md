@@ -4,6 +4,8 @@ Python 3.11 每日采集 → 原项目多空判读 → CSV / JSON 历史 → 可
 
 2026-09-17 最新修复已恢复 AAII 官方页抓取。按用户选择，NAAIM 使用官方公开的延迟数据：展示真实数值、原始日期及延迟天数，以 `delayed` 单独统计，不进入当前 Bull/Neutral/Bear。抓取失败仍是 `invalid`。最新实跑及 Telegram 投递结果见 [安装检查报告](INSTALL_REPORT.md)，逐项来源见 [来源审计](docs/source-audit.md)。
 
+2026-09-18 用户选择改为本机定时推送：每天北京时间 **07:00、21:00**，使用 macOS `launchd` 和独立运行目录；GitHub 保留手动执行，停止云端自动推送。安装和真实系统定时验收见 [本地部署记录](docs/local-deployment.md)。
+
 ## 本地运行
 
 本机已经安装 Python 3.11.16 并创建 `.venv`，在项目目录执行：
@@ -74,7 +76,7 @@ python -m pip check
 
 缺少配置时跳过推送，本地采集仍继续。CSV/JSON 先落盘；推送失败令本次进程退出码为 2，但不丢失数据。API 必须确认目标会话才记为 sent。请求超时不自动重试，避免重复发送。Token、chat ID 和响应正文不出现在日志中。
 
-凭据保存在忽略版控、权限 `0600` 的 `.env`，不写进代码。没有创建本机后台定时任务；每天北京时间 **07:00、21:00** 由下述 GitHub Actions 工作流负责，部署并配置 secrets 后生效。
+凭据保存在忽略版控、权限 `0600` 的 `.env`，不写进代码。本机运行副本位于 `~/Library/Application Support/DailyStockBot/`，由 `local.daily-stock-bot` LaunchAgent 每天北京时间 **07:00、21:00** 执行。Mac 需要开机、登录并联网，关闭 Codex 或终端不影响任务。
 
 ## Discord（可选）
 
@@ -102,15 +104,15 @@ data_date,release_date,value
 
 每行填入实际观察日、实际发布日期、真实数值；不附示例行情以免误用。程序仍检查日期、新鲜度、数值范围及零占位。当前选择不订阅，读取公开表并明确标为延迟参考；公开表未提供可靠发布日期，不能把观察日或抓取日当发布日期。
 
-## GitHub Actions
+## 定时运行与 GitHub Actions
 
-工作流：`.github/workflows/daily_run.yml`。目标仍是每天北京时间 **07:00 和 21:00**，含周末，显式指定 `Asia/Shanghai` 时区，并保留手动触发。
+正式调度由本机 `launchd` 负责，每天北京时间 **07:00 和 21:00**，含周末。`.github/workflows/daily_run.yml` 仅保留手动触发；自动 schedule 已删除，避免两个环境同时推送。
 
-GitHub 的整点触发可能延迟或丢失。9/18 实际出现过工作流 active、时间换算正确，但早间任务没有被创建。因此保留整点触发，并在 07–08 点、21–22 点的 05/15/25/35/45/55 分钟补检查。`schedule_guard.py` 只允许补发最近 3 小时内到期且没有发送记录的报告；已发送或结果不确定的时段会跳过，不重新安装依赖或抓取数据。
+本机每 5 分钟补检查一次，登录时也检查。`schedule_guard.py` 只允许补发最近 3 小时内到期且没有发送记录的报告；已发送或结果不确定的时段会跳过。只读 Telegram 连通性检查失败时不占用时段，网络恢复后可以重试。
 
-`data/delivery_state.json` 保存每个北京时间时段的尝试和结果，含计划时间、实际时间、GitHub run ID，不含 token/chat ID。发送前先提交 `sending` 记录，Telegram 确认后再保存 `sent`。发生请求超时/中断时保持 `uncertain` 或 `sending`，不盲目补发；需核对该次日志后处理。未配置 Telegram 的跳过不会伪装成发送成功。GitHub 手动触发也经过相同去重检查；本地 `python main.py` 仍可直接采集推送。
+运行目录的 `data/delivery_state.json` 保存每个北京时间时段的尝试和结果，不含 token/chat ID。发送前先持久化 `sending` 记录，Telegram 确认后再保存 `sent`。发生请求超时/中断时保持 `uncertain` 或 `sending`，不盲目补发；需核对该次日志后处理。本地文件锁阻止并发运行。GitHub 手动触发使用仓库自身回执，不读取本机数据；本地 `python main.py` 仍可直接按需采集推送。
 
-实际消息在采集完成后发送，无法保证整点送达。补检查仍依赖 GitHub 调度；整个平台调度故障时不能宣称这提供了独立故障兜底。Telegram 标题现在显示北京时间及计划时段。
+实际消息在采集完成后发送。Mac 关机或断网时无法准时发送；睡眠唤醒后只在补发窗口内处理。Telegram 标题显示北京时间及计划时段。此前 GitHub active 但无自动事件的问题记录在 [9/18 排查记录](docs/schedule-incident-2026-09-18.md)。
 
 早间报表使用最近已结束的美股交易日。21:00 北京时间通常仍在美股盘前，价格技术指标继续使用最近收盘，CNN 等按各自真实更新时间展示；不把昨天收盘伪装成今晚盘中行情。
 
@@ -120,7 +122,7 @@ GitHub 的整点触发可能延迟或丢失。9/18 实际出现过工作流 acti
 - 仅提交生成的数据；先提交再 pull --rebase，不在脏工作区直接 git pull，不用 `|| exit 0` 吞掉提交错误。
 - Actions Summary 列出值、来源、日期、状态；缺失指标发出 warning。
 - 请 fork 到自己的仓库并启用 Actions。Telegram 使用 Repository secrets `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`；AAII 备用通道使用 `FIRECRAWL_API_KEY`；Discord 可选，使用 `DISCORD_WEBHOOK_URL`。组织策略/分支保护也需允许机器人写入目标分支。不要提交本机 `.env`。
-- 已部署到 [NatureLL666/daily-stock-bot](https://github.com/NatureLL666/daily-stock-bot)，工作流处于 active。首次 [Ubuntu 手动实跑](https://github.com/NatureLL666/daily-stock-bot/actions/runs/35233636641) 成功；9/18 补发通过 118 项测试，Telegram API 确认投递，CSV/JSON 和发送回执均已提交。各期有效指标数量随源站更新而变化，实际定时触发的验证边界见 [推送排查记录](docs/schedule-incident-2026-09-18.md)。电脑关机不影响 GitHub 云端执行。
+- 代码备份在 [NatureLL666/daily-stock-bot](https://github.com/NatureLL666/daily-stock-bot)，云端手动运行保留。首次 [Ubuntu 手动实跑](https://github.com/NatureLL666/daily-stock-bot/actions/runs/35233636641) 和 9/18 手动补发均确认 Telegram 投递；这些记录不代表自动调度曾经成功。最新本机运行与定时验收见 [本地部署记录](docs/local-deployment.md)，当前回归测试为 124 项。
 
 ## 文件结构
 

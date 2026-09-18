@@ -1,5 +1,7 @@
 # 安装、修复与运行报告
 
+**最新部署：2026-09-18 已按用户选择切换本地 macOS 定时推送。** 每天北京时间 07:00、21:00；GitHub 停止自动触发，保留手动运行。10:27 的真实系统定时验收已成功发送 Telegram，退出码 0，12 项有效、2 项不可用、1 项延迟参考，124 项回归测试通过。运行目录、日志和限制见 [本地部署记录](docs/local-deployment.md)。下面保留此前安装与云端排查快照。
+
 原安装验收快照：2026-09-17T14:27:42.898501+00:00（GitHub Actions Ubuntu 手动实跑）。以下指标表属于这个历史快照，不代表之后每一期均有 14 项有效数据。
 
 2026-09-18 更新：07:00 定时事件未创建，UTC 换算正确；已于北京时间 08:17 成功补发，并部署显式北京时间、错峰补检查及持久化去重回执。此次云端通过 118 项测试，数据为 8 项有效、6 项缺失、1 项延迟参考。补发和去重已验证，自动定时尚未验收通过。最新观察边界与数据缺失原因见 [9/18 推送排查记录](docs/schedule-incident-2026-09-18.md)。
@@ -57,13 +59,13 @@ Telegram: sent (1 parts; API confirmed destination)
 
 ⑦ GitHub Actions 是否可以直接部署
 
-已按用户选择改为每天北京时间 07:00 / 21:00（含周末），目标仓库为 NatureLL666/daily-stock-bot。9/18 已改用显式 `Asia/Shanghai` 时区，并在随后两小时错峰补检查，发送回执防止重复推送。GitHub 定时可能排队延迟，实际消息在采集完成后发送。已部署并启用；9/17 首次验收只验证了手动云端运行、Telegram 推送、自动提交数据，未覆盖真正的定时事件，后续证据见上方排查记录。checkout 已更新到官方稳定 v7.0.1，setup-python 到 v7.0.0；Ubuntu/Python 3.11；增加权限、串行、超时、回归测试、数据质量摘要及安全提交顺序。
+目标仓库为 NatureLL666/daily-stock-bot。9/17 的手动云端运行、Telegram 推送和自动提交数据成功；9/18 曾尝试显式 `Asia/Shanghai` 和错峰补检查，但实际定时始终未通过验收，详见上方排查记录。现按用户选择删除 GitHub 自动 schedule，保留手动运行，由本机接管每天 07:00/21:00 推送。checkout 为官方稳定 v7.0.1，setup-python 为 v7.0.0；Ubuntu/Python 3.11；保留权限、串行、超时、回归测试、数据质量摘要及安全提交顺序。
 
 验证：100 项回归测试通过，覆盖 Telegram 长消息分段、无配置跳过、错误目标/HTTP 拒绝、超时不重试与脱敏、推送失败保留本地数据，以及 AAII 官方页面备用来源、日期、过期/空内容拒绝等。pip check、Python 语法、YAML 和所有 shell 片段通过；Ubuntu x86_64/Python 3.11 的 37 项 wheel 依赖解析成功，本次未引入新依赖。Telegram 实际投递已确认。GitHub 托管 Ubuntu 云端实跑通过安装依赖、100 项测试、采集、Telegram、数据质量摘要及历史数据提交全部步骤。Discord Webhook 未测试。源站可能同样限制 GitHub 的出口 IP。
 
 ⑧ 下一步
 
-本地已可直接运行 `.venv/bin/python main.py`，并自动发送 Telegram。[GitHub Actions](https://github.com/NatureLL666/daily-stock-bot/actions/workflows/daily_run.yml) 已启用，计划每天北京时间 07:00 / 21:00 采集后推送，含周末；但截至 9/18 08:46 仍未观察到实际自动触发，不能把这份计划视为已恢复送达的保证。电脑关机不影响已启动的云端任务。21:00 通常在美股开盘前，技术指标继续使用最近完整收盘。云端凭据仅使用加密 Repository secrets `TELEGRAM_BOT_TOKEN`、`TELEGRAM_CHAT_ID`、`FIRECRAWL_API_KEY`，不会上传本机 `.env`。
+9/18 已改为本机 LaunchAgent 每天北京时间 07:00 / 21:00 采集后推送，含周末；需要 Mac 开机、登录当前用户并联网，Codex 和终端可以关闭。正式数据与日志位于 `~/Library/Application Support/DailyStockBot/`。本地源代码仍可按需运行 `.venv/bin/python main.py`。GitHub Actions 仅保留手动运行，避免重复推送。21:00 通常在美股开盘前，技术指标继续使用最近完整收盘。云端加密 Secrets 保留用于手动运行，本机 `.env` 不提交到仓库。
 
 NAAIM 当前无需订阅。公开延迟数据作为历史参考保留，如将来需要最新一期，可再接入合法周度导出。没有建立本机定时服务。
 

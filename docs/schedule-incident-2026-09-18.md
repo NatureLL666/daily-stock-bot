@@ -1,5 +1,7 @@
 # 2026-09-18 早报未送达排查
 
+后续处理：用户确认 Mac 基本不关机，选择改为本地定时。已通过 10:27 的真实 macOS 定时触发和 Telegram 投递验收，GitHub 自动 schedule 停用，见 [本地部署记录](local-deployment.md)。这解决了当前推送的调度路径，不表示 GitHub 原调度问题已被修复。
+
 ## 已确认的事实
 
 - 08:06 北京时间核查时，工作流处于 active，仓库 Actions enabled，默认分支 main，未归档或禁用。

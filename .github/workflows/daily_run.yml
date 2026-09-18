@@ -1,12 +1,8 @@
 name: Daily Stock Index Fetcher
 
 on:
-  schedule:
-    - cron: '0 7,21 * * *'
-      timezone: 'Asia/Shanghai'
-    # Retry missing triggers off the hour; the receipt gate prevents duplicate sends.
-    - cron: '5,15,25,35,45,55 7,8,21,22 * * *'
-      timezone: 'Asia/Shanghai'
+  # Daily delivery is owned by the user's macOS launchd service.
+  # Keep cloud execution available explicitly; no competing scheduled sender.
   workflow_dispatch:
 
 permissions:
